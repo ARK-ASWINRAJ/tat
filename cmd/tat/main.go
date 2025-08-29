@@ -18,10 +18,21 @@ import (
 func main() {
 	root := &cobra.Command{Use: "tat", Short: "Terminal Activity Tracker"}
 
-	root.AddCommand(initCmd(), enableCmd(), disableCmd(), statusCmd(), startCmd(), searchCmd(), recordCmd())
+	root.AddCommand(versionCmd(), initCmd(), enableCmd(), disableCmd(), statusCmd(), startCmd(), searchCmd(), recordCmd())
 	_ = root.Execute()
 }
 
+var version = "dev" // default
+
+func versionCmd() *cobra.Command {
+	return &cobra.Command{
+		Use:   "version",
+		Short: "Show version",
+		Run: func(cmd *cobra.Command, args []string) {
+			fmt.Printf("tat version %s\n", version)
+		},
+	}
+}
 func initCmd() *cobra.Command {
 	return &cobra.Command{
 		Use:   "init",
