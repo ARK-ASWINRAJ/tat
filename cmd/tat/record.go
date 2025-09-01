@@ -13,6 +13,14 @@ import (
 	"github.com/spf13/cobra"
 )
 
+const maxOutputSize = 128 * 1024 // 128 KB
+
+func truncateOut(s string) string {
+	if len(s) > maxOutputSize {
+		return s[:maxOutputSize] + "<truncated>"
+	}
+	return s
+}
 func recordCmd() *cobra.Command {
 	return &cobra.Command{
 		Use:   "record",
@@ -42,6 +50,8 @@ func recordCmd() *cobra.Command {
 				TS         string `json:"ts"`
 				Exit       int    `json:"exit"`
 				DurationMs int64  `json:"duration_ms"`
+				Stdout     string `json:"stdout"`
+				Stderr     string `json:"stderr"`
 			}
 
 			rd := bufio.NewReader(os.Stdin)
@@ -80,6 +90,8 @@ func recordCmd() *cobra.Command {
 					"exit_code":   p.Exit,
 					"ended_at":    t,
 					"duration_ms": p.DurationMs,
+					"stdout":      truncateOut(p.Stdout),
+					"stderr":      truncateOut(p.Stderr),
 				}).Error
 			default:
 				return nil

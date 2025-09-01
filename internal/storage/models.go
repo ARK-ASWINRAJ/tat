@@ -21,6 +21,8 @@ type Command struct {
 	ExitCode   *int
 	DurationMs *int64
 	CWD        string
+	Stdout     string `gorm:"type:text"`
+	Stderr     string `gorm:"type:text"`
 	StartedAt  time.Time
 	EndedAt    *time.Time
 }
